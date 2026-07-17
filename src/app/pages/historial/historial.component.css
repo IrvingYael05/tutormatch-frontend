@@ -4,28 +4,29 @@
   min-height: 100vh;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
+/* ---- Header ---- */
+.agenda-header {
+  margin-bottom: 28px;
 }
 
-.header-icon {
+.agenda-title {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--primary-color), #3b82f6);
-  color: var(--white);
-}
-
-.title {
-  font-size: 1.5rem;
+  gap: 10px;
+  font-size: 1.85rem;
   font-weight: 700;
   color: var(--text-dark);
+  margin: 0 0 6px;
+}
+
+.title-icon {
+  color: var(--primary-color);
+}
+
+.agenda-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0;
 }
 
 .loading-state {

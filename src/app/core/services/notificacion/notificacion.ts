@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, interval } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, finalize } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../auth/auth';
 
@@ -22,6 +22,10 @@ export class NotificacionService implements OnDestroy {
   // Estado reactivo para las notificaciones
   private notificacionesSubject = new BehaviorSubject<Notificacion[]>([]);
   public notificaciones$ = this.notificacionesSubject.asObservable();
+
+  // Estado para saber qué notificación se está marcando como leída
+  private marcandoComoLeidaId = new BehaviorSubject<string | null>(null);
+  public marcandoComoLeidaId$ = this.marcandoComoLeidaId.asObservable();
 
   private pollingSubscription?: Subscription;
 
@@ -59,6 +63,8 @@ export class NotificacionService implements OnDestroy {
 
   // Petición PUT para marcar como leída
   public marcarComoLeida(notificacionId: string): Observable<any> {
+    this.marcandoComoLeidaId.next(notificacionId);
+
     return this.http.put(`${this.apiUrl}/${notificacionId}/leer`, {}).pipe(
       tap(() => {
         // 1. Cambiamos visualmente el estado a leída (el badge se actualiza aquí)
@@ -66,6 +72,9 @@ export class NotificacionService implements OnDestroy {
           n.id === notificacionId ? { ...n, leida: true } : n,
         );
         this.notificacionesSubject.next(actualizadas);
+      }),
+      finalize(() => {
+        this.marcandoComoLeidaId.next(null); // Limpiamos el estado de carga
       }),
     );
   }

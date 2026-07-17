@@ -34,24 +34,39 @@
     <div *ngIf="preguntas.length === 0" class="empty-state">Aún no hay preguntas en este foro.</div>
 
     <div *ngFor="let pregunta of preguntas" class="pregunta-card">
-      <div class="pregunta-info">
-        <div class="pregunta-meta">
-          <strong>{{ pregunta.alumnoNombre }}</strong>
-          <span>{{ pregunta.creadoEn | date: 'short' }}</span>
+      <div class="pregunta-header">
+        <div class="pregunta-info">
+          <div class="pregunta-meta">
+            <strong>{{ pregunta.alumnoNombre }}</strong>
+            <span>{{ pregunta.creadoEn | date: 'short' }}</span>
+          </div>
         </div>
-        <p class="pregunta-texto">{{ pregunta.pregunta }}</p>
+        <div class="pregunta-actions">
+          <button
+            class="btn-eliminar"
+            type="button"
+            *ngIf="authService.hasRole('ROLE_ALUMNO') && pregunta.alumnoId === authService.userId"
+            (click)="eliminarPregunta(pregunta)"
+            [disabled]="eliminandoPreguntaId === pregunta.id"
+            title="Eliminar pregunta"
+          >
+            <ng-container *ngIf="eliminandoPreguntaId !== pregunta.id; else spinner">
+              <!-- Ícono de basura -->
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </ng-container>
+            <ng-template #spinner>
+              <!-- Spinner de carga -->
+              <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+              </svg>
+            </ng-template>
+          </button>
+        </div>
       </div>
-
-      <div class="pregunta-actions">
-        <button
-          class="btn-danger"
-          type="button"
-          *ngIf="authService.hasRole('ROLE_ALUMNO') && pregunta.alumnoId === authService.userId"
-          (click)="eliminarPregunta(pregunta)"
-        >
-          Eliminar
-        </button>
-      </div>
+      <p class="pregunta-texto">{{ pregunta.pregunta }}</p>
 
       <div class="respuesta-card" *ngIf="pregunta.respuesta">
         <span class="label">Respuesta del tutor</span>
