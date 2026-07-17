@@ -121,29 +121,6 @@
   gap: 16px;
 }
 
-/* Badge del rol */
-.role-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background-color: var(--bg-light);
-  border: 1px solid #e2e8f0;
-  padding: 5px 14px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.role-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--primary-color);
-}
-
 /* Menú de usuario */
 .user-menu {
   display: flex;
@@ -151,7 +128,7 @@
   gap: 12px;
 }
 
-.btn-primary {
+.btn-primary.btn-logout {
   border: 1px solid #ef4444;
   background-color: #dc2626;
   color: #fff;
@@ -175,28 +152,44 @@
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 15px;
-  border-left: 2px solid rgba(226, 232, 240, 0.6);
-  padding-left: 15px;
-  margin-left: 5px;
+  gap: 12px;
+  border-left: 1px solid #e2e8f0;
+  padding-left: 16px;
+  margin-left: 8px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
 }
 
 .user-name {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-dark);
+  line-height: 1.2;
   text-transform: capitalize;
 }
 
-/* Responsivo para ocultar el nombre en móviles */
-@media (max-width: 768px) {
-  .user-profile {
-    border-left: none;
-    padding-left: 0;
-  }
-  .user-name {
-    display: none;
-  }
+.user-email {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 /* ================== SISTEMA DE NOTIFICACIONES ================== */
@@ -392,8 +385,13 @@
     padding: 8px 12px;
     gap: 0;
   }
-  .role-badge {
+  .user-info {
     display: none;
+  }
+  .user-profile {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
   }
 }
 
@@ -415,7 +413,6 @@
     border-radius: 50%;
   }
 }
-
 
 .btn-perfil {
   background: none;
@@ -439,4 +436,18 @@
 .btn-perfil.active-link {
   background-color: rgba(37, 99, 235, 0.1);
   color: var(--primary-color);
+}
+
+/* Animación para el spinner de carga */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

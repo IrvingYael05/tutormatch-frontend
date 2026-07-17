@@ -142,14 +142,7 @@ export class Catalogo implements OnInit, OnDestroy {
   // Helpers de UI
   // -----------------------------------------------------------------------
 
-  /** Retorna estrellas llenas / vacías / medias para la calificación */
-  getEstrellas(calificacion: number | null): { llenas: number; media: boolean; vacias: number } {
-    if (calificacion === null) return { llenas: 0, media: false, vacias: 0 };
-    const llenas = Math.floor(calificacion);
-    const media  = calificacion % 1 >= 0.5;
-    const vacias = 5 - llenas - (media ? 1 : 0);
-    return { llenas, media, vacias };
-  }
+
 
   formatearFecha(fechaIso: string): string {
     return new Date(fechaIso).toLocaleDateString('es-MX', {

@@ -99,6 +99,11 @@ export class AuthService {
 
   public get userEmail(): string {
     const payload = this.decodedToken;
-    return payload?.sub || '';
+    return payload?.email || '';
+  }
+
+  public get userNombre(): string {
+    const payload = this.decodedToken;
+    return payload?.nombre || '';
   }
 }

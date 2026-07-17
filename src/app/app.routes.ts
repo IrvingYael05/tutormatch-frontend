@@ -32,20 +32,24 @@ export const routes: Routes = [
     component: Layout,
     canActivateChild: [authGuard],
     children: [
-      // Tu redirección inteligente sin Home
+      // Redirección inteligente
       { path: '', redirectTo: 'catalogo', pathMatch: 'full' },
-
-      // EP-03/04: Agendas
+      
+      // EP-03/04: Agendas (Mis Tutorías activas)
       { path: 'mi-agenda', component: MiAgenda },
-      { path: 'mis-tutorias', component: MiAgenda }, // Mantenemos esta por si los alumnos la usan
-
-      // EP-04: Catálogo de tutorías (HU-13/14)
+      
+      // EP-04: Catálogo de tutorías
       { path: 'catalogo', component: Catalogo },
+      
+      // EP-05/07: Historial y Calificaciones
+      { path: 'historial', loadComponent: () => import('./pages/historial/historial.component').then(m => m.HistorialComponent) },
+      
+      // EP-06: Avisos, Foro y Admin
       { path: 'admin', component: Admin },
       { path: 'avisos', component: AvisosBoard },
       { path: 'sesion/:id/foro', component: SesionForo },
 
-      // Asistencia
+      // Asistencia y Perfil
       { path: 'sesion/:id/asistencia', component: TomarAsistencia },
       { path: 'mi-historial-asistencia', component: MiHistorialAsistencia },
       { path: 'perfil', component: Perfil },

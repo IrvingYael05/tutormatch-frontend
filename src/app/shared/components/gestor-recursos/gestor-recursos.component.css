@@ -1,0 +1,230 @@
+/* ==========================================
+   GESTOR DE RECURSOS – Estilos unificados
+   ========================================== */
+
+.gestor-recursos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* El fondo y padding lo proporciona el panel contenedor */
+  /* Si quieres un fondo propio, añádelo, pero lo dejamos transparente */
+}
+
+/* ---------- Loading ---------- */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid #e2e8f0;
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Empty state ---------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 0;
+  color: var(--text-muted);
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+}
+
+/* ---------- Lista ---------- */
+.recursos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recurso-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-light);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.recurso-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.recurso-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.recurso-icon {
+  flex-shrink: 0;
+  color: var(--primary-color);
+}
+
+.recurso-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.recurso-link {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+.recurso-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.recurso-fecha {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Botón Eliminar (estilo cancelar) ---------- */
+.btn-eliminar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-eliminar:not(:disabled):hover {
+  background-color: #fef2f2;
+  color: #dc2626; /* rojo */
+}
+
+.btn-eliminar:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ---------- Formulario de agregar ---------- */
+.agregar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.form-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+/* Usamos las mismas clases que el formulario de tutorías */
+.campo-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.campo-input {
+  padding: 11px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  font-family: inherit;
+}
+
+.campo-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.campo-input::placeholder {
+  color: #cbd5e1;
+}
+
+.campo-input:disabled {
+  background: #f8fafc;
+  cursor: not-allowed;
+}
+
+/* ---------- Botón Agregar (estilo primario unificado) ---------- */
+.btn-agregar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 12px 24px;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-agregar:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-agregar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

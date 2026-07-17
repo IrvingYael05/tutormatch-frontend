@@ -11,13 +11,15 @@ import {
 import { InscripcionService, AgendaAlumno } from '../../core/services/inscripcion/inscripcion';
 import { ToastService } from '../../core/services/toast/toast';
 import { AuthService } from '../../core/services/auth/auth';
+import { finalize } from 'rxjs';
 import { Toast } from '../../shared/components/toast/toast';
 import { PerfilService, SesionHistorialTutor } from '../../core/services/perfil/perfil';
+import { GestorRecursosComponent } from '../../shared/components/gestor-recursos/gestor-recursos.component';
 
 @Component({
   selector: 'app-mi-agenda',
   standalone: true,
-  imports: [CommonModule, FormsModule, Toast],
+  imports: [CommonModule, FormsModule, Toast, GestorRecursosComponent],
   templateUrl: './mi-agenda.html',
   styleUrl: './mi-agenda.css',
 })
@@ -47,7 +49,16 @@ export class MiAgenda implements OnInit {
   fechaBloqueada = false;
   formulario: SesionRequest = this.formularioVacio();
 
-  isCanceling = false;
+  // -----------------------------------------------------------------------
+  // Estado del modal de Recursos
+  // -----------------------------------------------------------------------
+  mostrarRecursos = false;
+  sesionRecursosId: string | null = null;
+
+  // -----------------------------------------------------------------------
+  // Estado de carga de cancelaciones
+  // -----------------------------------------------------------------------
+  cancelingId: string | null = null;
 
   constructor(
     private sesionService: SesionService,
@@ -160,6 +171,20 @@ cargarHistorialTutor(): void {
   }
 
   // =========================================================================
+  // SECCIÓN RECURSOS — Épica 7
+  // =========================================================================
+
+  abrirRecursos(sesionId: string): void {
+    this.sesionRecursosId = sesionId;
+    this.mostrarRecursos = true;
+  }
+
+  cerrarRecursos(): void {
+    this.mostrarRecursos = false;
+    this.sesionRecursosId = null;
+  }
+
+  // =========================================================================
   // HU-09 / HU-11: Guardar sesión (crear o actualizar)
   // =========================================================================
 
@@ -229,21 +254,21 @@ cargarHistorialTutor(): void {
   // =========================================================================
 
   confirmarCancelacionSesion(sesion: SesionResponse): void {
-    this.isCanceling = true;
     this.toastService.preguntar(
       `¿Cancelar "${sesion.titulo}"? Esto notificará a los alumnos inscritos.`,
       () => {
-        this.sesionService.cancelar(sesion.id).subscribe({
-          next: () => {
-            this.isCanceling = false;
-            this.toastService.mostrar('Sesión cancelada.', 'info');
-            this.cargarAgendaTutor();
-          },
-          error: (err) => {
-            this.isCanceling = false;
-            this.toastService.mostrar(err.error || 'Error al cancelar.', 'error');
-          },
-        });
+        this.cancelingId = sesion.id;
+        this.sesionService.cancelar(sesion.id).pipe(
+          finalize(() => (this.cancelingId = null))
+        ).subscribe({
+            next: () => {
+              this.toastService.mostrar('Sesión cancelada.', 'info');
+              this.cargarAgendaTutor();
+            },
+            error: (err) => {
+              this.toastService.mostrar(err.error || 'Error al cancelar.', 'error');
+            },
+          });
       },
     );
   }
@@ -253,21 +278,21 @@ cargarHistorialTutor(): void {
   // =========================================================================
 
   confirmarCancelacionInscripcion(sesion: AgendaAlumno): void {
-    this.isCanceling = true;
     this.toastService.preguntar(
       `¿Estás seguro de cancelar tu asistencia a "${sesion.titulo}"? Tu lugar quedará disponible para otros.`,
       () => {
-        this.inscripcionService.cancelarInscripcion(sesion.inscripcionId).subscribe({
-          next: () => {
-            this.toastService.mostrar('Inscripción cancelada. Tu lugar ha sido liberado.', 'info');
-            this.cargarAgendaAlumno();
-            this.isCanceling = false;
-          },
-          error: (err) => {
-            this.toastService.mostrar(err.error || 'Error al cancelar.', 'error');
-            this.isCanceling = false;
-          },
-        });
+        this.cancelingId = sesion.inscripcionId;
+        this.inscripcionService.cancelarInscripcion(sesion.inscripcionId).pipe(
+          finalize(() => (this.cancelingId = null))
+        ).subscribe({
+            next: () => {
+              this.toastService.mostrar('Inscripción cancelada. Tu lugar ha sido liberado.', 'info');
+              this.cargarAgendaAlumno();
+            },
+            error: (err) => {
+              this.toastService.mostrar(err.error || 'Error al cancelar.', 'error');
+            },
+          });
       },
     );
   }
