@@ -6,6 +6,7 @@ import { PreguntaService, PreguntaDto, PreguntaForm } from '../../core/services/
 import { AuthService } from '../../core/services/auth/auth';
 import { InscripcionService } from '../../core/services/inscripcion/inscripcion';
 import { ToastService } from '../../core/services/toast/toast';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-sesion-foro',
@@ -23,6 +24,7 @@ export class SesionForo {
   public cargando = false;
   public cargandoInscripcion = false;
   public puedePublicarPregunta = false;
+  public eliminandoPreguntaId: string | null = null;
 
   constructor(
     private preguntaService: PreguntaService,
@@ -114,12 +116,18 @@ export class SesionForo {
 
   eliminarPregunta(pregunta: PreguntaDto) {
     this.toastService.preguntar('¿Eliminar tu pregunta?', () => {
-      this.preguntaService.eliminar(this.sesionId, pregunta.id).subscribe({
+      this.eliminandoPreguntaId = pregunta.id;
+      this.preguntaService.eliminar(this.sesionId, pregunta.id).pipe(
+        finalize(() => this.eliminandoPreguntaId = null)
+      ).subscribe({
         next: () => {
           this.toastService.mostrar('Pregunta eliminada.', 'success');
           this.preguntas = this.preguntas.filter((p) => p.id !== pregunta.id);
         },
-        error: () => this.toastService.mostrar('No se pudo eliminar la pregunta.', 'error'),
+        error: (err) => {
+          const mensaje = err.error?.message || 'No se pudo eliminar la pregunta.';
+          this.toastService.mostrar(mensaje, 'error');
+        },
       });
     });
   }
