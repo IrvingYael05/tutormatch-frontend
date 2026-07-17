@@ -7,7 +7,7 @@ import { publicGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/auth-guard';
 import { Register } from './pages/register/register';
 import { Admin } from './pages/admin/admin';
-
+import { Peticiones } from './pages/peticiones/peticiones';
 export const routes: Routes = [
   {
     // Ruta pública
@@ -21,6 +21,7 @@ export const routes: Routes = [
     canActivate: [publicGuard],
     component: Register,
   },
+  { path: 'peticiones', component: Peticiones },
   {
     // Rutas privadas
     path: 'app',

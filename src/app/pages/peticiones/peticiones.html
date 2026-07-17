@@ -1,0 +1,91 @@
+<div class="peticiones-page">
+  <header class="peticiones-header">
+    <div>
+      <h1>Peticiones</h1>
+      <p class="peticiones-subtitle">
+        Necesidades académicas de la comunidad. Si eres Tutor, aquí puedes ver la demanda real.
+      </p>
+    </div>
+
+    <!-- HU-33: solo el Alumno puede crear peticiones -->
+    <button
+      class="btn-primary"
+      *ngIf="authService.hasRole('ROLE_ALUMNO')"
+      (click)="abrirModalCrear()"
+    >
+      + Nueva Petición
+    </button>
+  </header>
+
+  <!-- Estado: cargando -->
+  <div class="peticiones-state" *ngIf="cargando">
+    <span class="spinner"></span>
+    Cargando tablero…
+  </div>
+
+  <!-- Estado: error -->
+  <div class="peticiones-state peticiones-state-error" *ngIf="!cargando && error">
+    No se pudo cargar el tablero.
+    <button class="btn-reintentar" (click)="cargarTablero()">Reintentar</button>
+  </div>
+
+  <!-- Estado: vacío -->
+  <div class="peticiones-state" *ngIf="!cargando && !error && peticiones.length === 0">
+    Todavía no hay peticiones publicadas.
+  </div>
+
+  <!-- Tablero de tarjetas -->
+  <div class="peticiones-grid" *ngIf="!cargando && !error && peticiones.length > 0">
+    <div
+      class="peticion-card"
+      *ngFor="let peticion of peticiones"
+      [class.atendida]="peticion.estado === ESTADO.ATENDIDA"
+    >
+      <div class="peticion-card-header">
+        <h3>{{ peticion.materia }}</h3>
+        <span class="badge-atendida" *ngIf="peticion.estado === ESTADO.ATENDIDA">Atendida</span>
+      </div>
+
+      <p class="peticion-descripcion">{{ peticion.descripcion }}</p>
+
+      <div class="peticion-meta">
+        <span class="peticion-autor">{{ peticion.alumnoNombre }}</span>
+        <span class="peticion-fecha">{{ peticion.creadoEn | date: 'short' }}</span>
+      </div>
+
+      <p class="peticion-atendida-por" *ngIf="peticion.estado === ESTADO.ATENDIDA">
+        Atendida por {{ peticion.tutorAtendioNombre }}
+      </p>
+
+      <div class="peticion-acciones" *ngIf="peticion.estado === ESTADO.ACTIVA">
+        <!-- HU-35: solo el autor puede eliminar su propia petición -->
+        <button
+          class="btn-accion btn-eliminar"
+          *ngIf="peticion.propia"
+          [disabled]="procesando.has(peticion.id)"
+          (click)="eliminarPeticion(peticion)"
+        >
+          Eliminar
+        </button>
+
+        <!-- HU-36: solo un Tutor puede marcarla como atendida -->
+        <button
+          class="btn-accion btn-atender"
+          *ngIf="authService.hasRole('ROLE_TUTOR')"
+          [disabled]="procesando.has(peticion.id)"
+          (click)="marcarComoAtendida(peticion)"
+        >
+          Marcar como Atendida
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HU-33: modal de creación -->
+  <app-crear-peticion-modal
+    [visible]="mostrarModalCrear"
+    [enviando]="creando"
+    (cerrar)="cerrarModalCrear()"
+    (enviar)="crearPeticion($event)"
+  ></app-crear-peticion-modal>
+</div>

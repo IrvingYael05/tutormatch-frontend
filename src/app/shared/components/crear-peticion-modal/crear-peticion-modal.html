@@ -1,0 +1,55 @@
+<div class="modal-overlay" *ngIf="visible" (click)="onCerrar()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Nueva Petición</h3>
+      <button class="btn-close" (click)="onCerrar()" [disabled]="enviando">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-hint">
+        Cuéntale a la comunidad qué materia y tema necesitas repasar. Los tutores activos podrán ver
+        tu petición y abrir una sesión para cubrirla.
+      </p>
+
+      <label for="materia" class="modal-label">Materia</label>
+      <input
+        id="materia"
+        name="materia"
+        type="text"
+        placeholder="Ej. Cálculo Diferencial"
+        [(ngModel)]="materia"
+        [disabled]="enviando"
+      />
+
+      <label for="descripcion" class="modal-label">Tema / Descripción</label>
+      <textarea
+        id="descripcion"
+        name="descripcion"
+        rows="4"
+        placeholder="Ej. Necesito repasar límites y continuidad antes del parcial..."
+        [(ngModel)]="descripcion"
+        [disabled]="enviando"
+      ></textarea>
+
+      <div class="modal-footer-hint">
+        <span [class.text-error]="materia.trim().length > 0 && materia.trim().length < materiaMin">
+          Materia: {{ materia.trim().length }} / {{ materiaMin }} mín.
+        </span>
+        <span
+          [class.text-error]="
+            descripcion.trim().length > 0 && descripcion.trim().length < descripcionMin
+          "
+        >
+          Descripción: {{ descripcion.trim().length }} / {{ descripcionMin }} mín.
+        </span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="onCerrar()" [disabled]="enviando">Cancelar</button>
+      <button class="btn-primary" (click)="onEnviar()" [disabled]="!esValido || enviando">
+        {{ enviando ? 'Publicando...' : 'Publicar petición' }}
+      </button>
+    </div>
+  </div>
+</div>

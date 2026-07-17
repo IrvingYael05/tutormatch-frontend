@@ -1,0 +1,5 @@
+[33mcc00280[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/main[m[33m)[m H05
+[33m2037804[m Merge pull request #3 from irvingyael2/main Épica 6 Parte 1 de 2
+[33m5838b64[m feat: add NotificacionService for handling notifications with polling and CRUD operations
+[33m568f6b5[m Merge pull request #2 from irvingyael2/main
+[33mfc9c24c[m fix: update navigation link to use routerLink and restore environment configuration
