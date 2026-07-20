@@ -4,7 +4,16 @@
     <!-- Logo -->
     <div class="logo">
       <span class="logo-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
           <path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5" />
         </svg>
@@ -77,7 +86,7 @@
           <span class="notification-badge" *ngIf="sinLeer$ | async as sinLeerCount">{{ sinLeerCount }}</span>
         </button>
 
-        <!-- Menú desplegable Notificaciones -->
+        <!-- Menú desplegable -->
         <div class="notifications-dropdown" *ngIf="mostrarNotificaciones">
           <div class="dropdown-header">
             <h4>Notificaciones</h4>
@@ -118,29 +127,6 @@
         </div>
       </div>
 
-      <!-- HU-05: Menú desplegable de perfil (rol + Quiero ser Tutor) -->
-      <div class="profile-wrapper" *ngIf="authService.isLoggedIn" style="position: relative;">
-        <button class="role-badge role-badge-btn" (click)="togglePerfilMenu()" style="border: none; cursor: pointer;">
-          <span class="role-dot"></span>
-          {{ authService.primaryRole }}
-          <svg class="chevron" width="12" height="12" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </button>
-
-        <div class="profile-dropdown" *ngIf="mostrarPerfilMenu">
-          <button class="dropdown-item" *ngIf="puedeSolicitarTutor" (click)="abrirModalTutor()">
-            Quiero ser Tutor
-          </button>
-          <div class="dropdown-item disabled" *ngIf="solicitudPendiente">
-            Solicitud: {{ estadoSolicitudTexto }} (en revisión…)
-          </div>
-          <div class="dropdown-item disabled" *ngIf="solicitudRechazada">
-            Solicitud: {{ estadoSolicitudTexto }}
-          </div>
-        </div>
-      </div>
-
       <!-- Perfil de Usuario con enlace a la vista de perfil -->
       <a routerLink="/app/perfil" class="user-profile" *ngIf="authService.isLoggedIn" style="text-decoration: none; cursor: pointer; transition: opacity 0.2s;" title="Ir a Mi Perfil" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
         <div class="user-info">
@@ -168,12 +154,4 @@
   <main class="app-content">
     <router-outlet></router-outlet>
   </main>
-
-  <!-- HU-05: Modal para solicitar el rol de Tutor -->
-  <app-solicitar-tutor-modal
-    [visible]="mostrarModalTutor"
-    [enviando]="enviandoSolicitud"
-    (cerrar)="cerrarModalTutor()"
-    (enviar)="enviarSolicitudTutor($event)"
-  ></app-solicitar-tutor-modal>
 </div>
